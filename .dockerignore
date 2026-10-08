@@ -1,0 +1,8 @@
+.git
+frontend/node_modules
+frontend/dist
+frontend/src
+frontend/package*.json
+frontend/vite.config.js
+backend.log
+frontend.log

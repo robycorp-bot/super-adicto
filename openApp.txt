@@ -1,0 +1,67 @@
+UM DIA DE CADA VEZ — COMO EXECUTAR NO WINDOWS
+================================================
+
+REQUISITO
+---------
+Instale e abra o Docker Desktop. Não precisa instalar Go, Node, npm, PHP ou Composer.
+
+INICIAR A APLICAÇÃO
+-------------------
+1. Abra o PowerShell na pasta do projeto:
+   C:\Users\User\Documents\repos\super-adicto
+
+   Se o PowerShell abriu em outra pasta, execute:
+   cd C:\Users\User\Documents\repos\super-adicto
+
+2. Execute este comando:
+   powershell -ExecutionPolicy Bypass -File .\iniciar.ps1
+
+   O comando constrói/inicia os containers do PHP e MySQL, espera o banco
+   ficar pronto e abre o navegador. Na primeira execução, o Docker precisa
+   baixar imagens, então pode levar alguns minutos.
+
+3. Se o navegador não abrir automaticamente, acesse:
+   http://localhost:5173
+
+CRIAR SEU ACESSO
+----------------
+Na primeira visita, escolha “Criar meu espaço”. Depois do cadastro, preencha
+seu perfil para começar a usar o calendário.
+
+INICIAR SEM ABRIR O NAVEGADOR
+-----------------------------
+powershell -ExecutionPolicy Bypass -File .\iniciar.ps1 -SemNavegador
+
+PARAR A APLICAÇÃO
+-----------------
+Na pasta do projeto, execute:
+docker compose down
+
+Isso para os containers, mas mantém os dados no volume local do MySQL.
+Para iniciar novamente, rode o comando de inicialização acima.
+
+ENDEREÇOS LOCAIS
+----------------
+Aplicação (frontend e API): http://localhost:5173
+API (verificação):          http://localhost:5173/api/health
+MySQL:                      localhost:3307
+
+SOLUÇÃO DE PROBLEMAS
+--------------------
+- “docker não foi encontrado”: instale o Docker Desktop, abra-o e tente de novo.
+- Porta ocupada: outro programa pode estar usando 5173 ou 3307. Feche esse
+  programa ou ajuste a porta publicada em docker-compose.yml.
+- Confira o estado dos containers:
+  docker compose ps
+- Consulte os logs:
+  docker compose logs --tail 100 backend
+  docker compose logs --tail 100 mysql
+- Reinicie os serviços sem apagar os dados:
+  docker compose down
+  powershell -ExecutionPolicy Bypass -File .\iniciar.ps1
+
+IMPORTANTE SOBRE OS DADOS
+-------------------------
+Os dados ficam no volume Docker local “mysql_data”. “docker compose down”
+preserva os dados. Não use “docker compose down -v” a menos que queira apagar
+permanentemente o banco local.

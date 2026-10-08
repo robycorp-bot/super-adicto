@@ -1,0 +1,40 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: super-adicto-backend
+    restart: unless-stopped
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: super_adicto
+      DB_USER: root
+      DB_PASSWORD: recuperacao_local
+      FRONTEND_ORIGIN: http://localhost:5173
+      TZ: America/Sao_Paulo
+    ports:
+      - "5173:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+  mysql:
+    image: mysql:8.4
+    container_name: super-adicto-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: recuperacao_local
+      MYSQL_DATABASE: super_adicto
+      TZ: America/Sao_Paulo
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-precuperacao_local"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+volumes:
+  mysql_data:
