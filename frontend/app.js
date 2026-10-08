@@ -1,4 +1,5 @@
 const API = `${location.origin}/api`
+const todayISO = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo' }).format(new Date())
 const state = {
   user: null, screen: 'loading', tab: 'calendario', modal: '', month: new Date(`${todayISO().slice(0, 7)}-15T12:00:00`),
   days: [], relapses: [], selectedDate: '', message: '', error: '', loading: false, mobileNav: false,
@@ -7,7 +8,6 @@ const state = {
   relapse: { startDate: todayISO(), endDate: '', duration: '', account: '', observations: '' }
 }
 const app = document.querySelector('#app')
-const todayISO = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo' }).format(new Date())
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))
 const api = async (path, options={}) => {
   const response = await fetch(`${API}${path}`, { credentials:'include', headers:{'Content-Type':'application/json',...(options.headers||{})}, ...options })
